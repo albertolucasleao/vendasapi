@@ -1,9 +1,9 @@
-﻿namespace Ambev.DeveloperEvaluation.WebApi.Features.Sale.CreateSale;
+﻿namespace Ambev.DeveloperEvaluation.WebApi.Features.Sale.UpdateSale;
 
 /// <summary>
-/// API response model for CreateSale operation
+/// API response model for UpdateSale operation
 /// </summary>
-public class CreateSaleProductResponse
+public class UpdateSaleProductResponse
 {
     /// <summary>
     /// The unique identifier of the selling product
@@ -38,7 +38,7 @@ public class CreateSaleProductResponse
     /// <summary>
     /// The discount applied
     /// </summary>
-    public double Discount { get; set; }
+    public string Discount { get; set; } = string.Empty;
 
     /// <summary>
     /// The total with discount

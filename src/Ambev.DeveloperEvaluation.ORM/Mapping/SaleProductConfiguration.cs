@@ -19,7 +19,7 @@ public class SaleProductConfiguration : IEntityTypeConfiguration<SaleProduct>
         builder.Property(s => s.TotalPaid);
         builder.Property(s => s.Discount);
 
-        builder.HasOne(s => s.Sale).WithMany(s => s.Product)
+        builder.HasOne(s => s.Sale).WithMany(s => s.Products)
             .HasForeignKey(s => s.IdSale)
             .OnDelete(DeleteBehavior.Restrict);
     }

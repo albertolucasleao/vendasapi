@@ -3,6 +3,9 @@ using MediatR;
 
 namespace Ambev.DeveloperEvaluation.Application.Sales.GetSale;
 
+/// <summary>
+/// Command for retrieving a get by their ID
+/// </summary>
 public class GetSaleCommand : IRequest<GetSaleResult>
 {
     /// <summary>

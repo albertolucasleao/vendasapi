@@ -1,15 +1,42 @@
-﻿using Ambev.DeveloperEvaluation.WebApi.Features.Sale.CreateSale;
+﻿namespace Ambev.DeveloperEvaluation.WebApi.Features.Sale.GetSale;
 
-namespace Ambev.DeveloperEvaluation.WebApi.Features.Sale.GetSale
+/// <summary>
+/// API response model for GetSale operation
+/// </summary>
+public class GetSaleResponse
 {
-    public class GetSaleResponse
-    {
-        public Guid Id { get; set; }
-        public DateTime DateSale { get; set; }
-        public Guid IdCustomer { get; set; }
-        public double ValueTotal { get; set; }
-        public Guid Branch { get; set; }
-        public bool Cancelled { get; set; }
-        public List<GetSaleProductResponse> Product { get; set; } = new();
-    }
+    /// <summary>
+    /// The unique identifier for the sale
+    /// </summary>
+    public Guid Id { get; set; }
+
+    /// <summary>
+    /// The date of sale
+    /// </summary>
+    public DateTime DateSale { get; set; }
+
+    /// <summary>
+    /// The customer identifier
+    /// </summary>
+    public Guid IdCustomer { get; set; }
+
+    /// <summary>
+    /// The total amount
+    /// </summary>
+    public double ValueTotal { get; set; }
+
+    /// <summary>
+    /// The branch identifier
+    /// </summary>
+    public Guid Branch { get; set; }
+
+    /// <summary>
+    /// The sale is canceled, true or false
+    /// </summary>
+    public bool Cancelled { get; set; }
+
+    /// <summary>
+    /// The products for sale
+    /// </summary>
+    public List<GetSaleProductResponse> Products { get; set; } = new();
 }

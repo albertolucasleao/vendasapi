@@ -1,27 +1,27 @@
-﻿namespace Ambev.DeveloperEvaluation.WebApi.Features.Sale.CreateSale;
+﻿namespace Ambev.DeveloperEvaluation.Application.Sales.UpdateSale;
 
 /// <summary>
-/// API response model for CreateSale operation
+/// Response model for UpdateSale operation
 /// </summary>
-public class CreateSaleProductResponse
+public class UpdateSaleProductResult
 {
     /// <summary>
-    /// The unique identifier of the selling product
+    /// The unique identifier for the sale
     /// </summary>
     public Guid Id { get; set; }
 
     /// <summary>
-    /// The unique identifier for the sale
+    /// The date of sale
     /// </summary>
     public Guid IdSale { get; set; }
 
     /// <summary>
-    /// The unique product identifier
+    /// The product identifier
     /// </summary>
     public Guid IdProduct { get; set; }
 
     /// <summary>
-    /// The quantity of the product 
+    /// The quantity of the product
     /// </summary>
     public int Quantity { get; set; }
 
@@ -38,7 +38,7 @@ public class CreateSaleProductResponse
     /// <summary>
     /// The discount applied
     /// </summary>
-    public double Discount { get; set; }
+    public string Discount { get; set; } = string.Empty;
 
     /// <summary>
     /// The total with discount

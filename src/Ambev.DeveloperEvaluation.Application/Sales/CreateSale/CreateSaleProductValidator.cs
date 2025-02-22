@@ -2,8 +2,20 @@
 
 namespace Ambev.DeveloperEvaluation.Application.Sales.CreateSale;
 
+/// <summary>
+/// Validator for CreateSaleProductCommand that defines validation rules for sale product creation command.
+/// </summary>
 public class CreateSaleProductValidator : AbstractValidator<CreateSaleProductCommand>
 {
+    /// <summary>
+    /// Initializes a new instance of the CreateSaleProductValidator with defined validation rules.
+    /// </summary>
+    /// <remarks>
+    /// Validation rules include:
+    /// - IdProduct: Required, Must be in valid format 
+    /// - Quantity: Required, must contain the quantity of products
+    /// - PricesUnit: Required, must contain the unit price of the product
+    /// </remarks>
     public CreateSaleProductValidator()
     {
         RuleFor(s => s.IdProduct).NotEmpty();

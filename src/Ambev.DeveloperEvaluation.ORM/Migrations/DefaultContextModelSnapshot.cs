@@ -37,6 +37,9 @@ namespace Ambev.DeveloperEvaluation.ORM.Migrations
                     b.Property<DateTime>("DateSale")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<DateTime?>("DateUpdate")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<Guid>("IdCustomer")
                         .HasColumnType("uuid");
 
@@ -66,14 +69,14 @@ namespace Ambev.DeveloperEvaluation.ORM.Migrations
                     b.Property<double>("PricesTotal")
                         .HasColumnType("double precision");
 
-                    b.Property<double>("PricesTotalDiscount")
-                        .HasColumnType("double precision");
-
                     b.Property<double>("PricesUnit")
                         .HasColumnType("double precision");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("integer");
+
+                    b.Property<double>("TotalPaid")
+                        .HasColumnType("double precision");
 
                     b.HasKey("Id");
 
@@ -133,7 +136,7 @@ namespace Ambev.DeveloperEvaluation.ORM.Migrations
             modelBuilder.Entity("Ambev.DeveloperEvaluation.Domain.Entities.SaleProduct", b =>
                 {
                     b.HasOne("Ambev.DeveloperEvaluation.Domain.Entities.Sale", "Sale")
-                        .WithMany("Product")
+                        .WithMany("Products")
                         .HasForeignKey("IdSale")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -143,7 +146,7 @@ namespace Ambev.DeveloperEvaluation.ORM.Migrations
 
             modelBuilder.Entity("Ambev.DeveloperEvaluation.Domain.Entities.Sale", b =>
                 {
-                    b.Navigation("Product");
+                    b.Navigation("Products");
                 });
 #pragma warning restore 612, 618
         }

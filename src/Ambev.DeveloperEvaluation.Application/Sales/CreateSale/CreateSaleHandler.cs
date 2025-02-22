@@ -14,6 +14,12 @@ public class CreateSaleHandler : IRequestHandler<CreateSaleCommand, CreateSaleRe
     private readonly IMapper _mapper;
     private readonly ISaleRepository _saleRepository;
 
+    /// <summary>
+    /// Initializes a new instance of CreateSaleHandler
+    /// </summary>
+    /// <param name="saleRepository">The sale repository</param>
+    /// <param name="mapper">The AutoMapper instance</param>
+    /// <param name="validator">The validator for CreateSaleCommand</param>
     public CreateSaleHandler(IMapper mapper, 
                              ISaleRepository saleRepository)
     {
@@ -21,23 +27,29 @@ public class CreateSaleHandler : IRequestHandler<CreateSaleCommand, CreateSaleRe
         _saleRepository = saleRepository ?? throw new ArgumentException(nameof(ISaleRepository));
     }
 
+    /// <summary>
+    /// Handles the CreateSaleCommand request
+    /// </summary>
+    /// <param name="command">The CreateSale command</param>
+    /// <param name="cancellationToken">Cancellation token</param>
+    /// <returns>The created sale details</returns>
     public async Task<CreateSaleResult> Handle(CreateSaleCommand command, CancellationToken cancellationToken)
     {
-        var validator = new CreateSaleValidator();
-        var validationResult = await validator.ValidateAsync(command, cancellationToken);
+        var validatorSale = new CreateSaleValidator();
+        var validationSaleResult = await validatorSale.ValidateAsync(command, cancellationToken);
 
-        if (!validationResult.IsValid)
-            throw new ValidationException(validationResult.Errors);
+        if (!validationSaleResult.IsValid)
+            throw new ValidationException(validationSaleResult.Errors);
 
         var sale = _mapper.Map<Sale>(command);
         
         sale.DateSale = DateTime.UtcNow;
 
-        sale.Product.ForEach(x => { x.ApplyDiscount(); });
-        sale.Product.ForEach(x => { x.CalculateTotal(); });
+        sale.Products.ForEach(x => { x.ApplyDiscount(); });
+        sale.Products.ForEach(x => { x.CalculateTotal(); });
 
         var valorTotal = new double();
-        sale.Product.ForEach(x => { valorTotal =+ x.TotalPaid; });
+        sale.Products.ForEach(x => { valorTotal += x.TotalPaid; });
         sale.ValueTotal = valorTotal;
 
         var createdSale = await _saleRepository.CreateAsync(sale, cancellationToken);

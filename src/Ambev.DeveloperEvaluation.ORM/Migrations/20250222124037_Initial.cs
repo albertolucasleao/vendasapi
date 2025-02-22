@@ -17,6 +17,7 @@ namespace Ambev.DeveloperEvaluation.ORM.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     DateSale = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    DateUpdate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     IdCustomer = table.Column<Guid>(type: "uuid", nullable: false),
                     ValueTotal = table.Column<double>(type: "double precision", nullable: false),
                     Branch = table.Column<Guid>(type: "uuid", nullable: false),
@@ -55,7 +56,7 @@ namespace Ambev.DeveloperEvaluation.ORM.Migrations
                     Quantity = table.Column<int>(type: "integer", nullable: false),
                     PricesUnit = table.Column<double>(type: "double precision", nullable: false),
                     Discount = table.Column<double>(type: "double precision", nullable: false),
-                    PricesTotalDiscount = table.Column<double>(type: "double precision", nullable: false),
+                    TotalPaid = table.Column<double>(type: "double precision", nullable: false),
                     PricesTotal = table.Column<double>(type: "double precision", nullable: false),
                     IdSale = table.Column<Guid>(type: "uuid", nullable: false)
                 },

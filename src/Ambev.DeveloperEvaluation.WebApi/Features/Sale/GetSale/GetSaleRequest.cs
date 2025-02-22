@@ -1,7 +1,12 @@
-﻿namespace Ambev.DeveloperEvaluation.WebApi.Features.Sale.GetSale
+﻿namespace Ambev.DeveloperEvaluation.WebApi.Features.Sale.GetSale;
+
+/// <summary>
+/// Represents a request to get a sale in the system.
+/// </summary>
+public class GetSaleRequest
 {
-    public class GetSaleRequest
-    {
-        public Guid Id { get; set; }
-    }
+    /// <summary>
+    /// Gets or sets the Id. Must contain the identification of the sale.
+    /// </summary>
+    public Guid Id { get; set; }
 }

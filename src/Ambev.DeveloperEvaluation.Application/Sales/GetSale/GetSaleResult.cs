@@ -1,4 +1,6 @@
-﻿namespace Ambev.DeveloperEvaluation.Application.Sales.GetSale;
+﻿using Ambev.DeveloperEvaluation.Domain.Enums;
+
+namespace Ambev.DeveloperEvaluation.Application.Sales.GetSale;
 
 /// <summary>
 /// Response model for GetSale operation
@@ -33,7 +35,7 @@ public class GetSaleResult
     /// <summary>
     /// The sale is canceled, true or false
     /// </summary>
-    public bool Cancelled { get; set; }
+    public SaleStatus Status { get; set; }
 
     /// <summary>
     /// The products for sale

@@ -1,4 +1,6 @@
-﻿namespace Ambev.DeveloperEvaluation.WebApi.Features.Sale.UpdateSale;
+﻿using Ambev.DeveloperEvaluation.Domain.Enums;
+
+namespace Ambev.DeveloperEvaluation.WebApi.Features.Sale.UpdateSale;
 
 /// <summary>
 /// API response model for UpdateSale operation
@@ -33,7 +35,7 @@ public class UpdateSaleResponse
     /// <summary>
     /// The sale is canceled, true or false
     /// </summary>
-    public bool Cancelled { get; set; }
+    public SaleStatus Status { get; set; }
 
     /// <summary>
     /// The products for sale

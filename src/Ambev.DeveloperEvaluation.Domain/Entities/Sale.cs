@@ -1,5 +1,6 @@
 ﻿using Ambev.DeveloperEvaluation.Common.Validation;
 using Ambev.DeveloperEvaluation.Domain.Common;
+using Ambev.DeveloperEvaluation.Domain.Enums;
 using Ambev.DeveloperEvaluation.Domain.Validation;
 
 namespace Ambev.DeveloperEvaluation.Domain.Entities;
@@ -44,7 +45,7 @@ public class Sale : BaseEntity
     /// The sale is canceled.
     /// Must not be null or empty.
     /// </summary>
-    public bool Cancelled { get; set; }
+    public SaleStatus Status { get; set; }
 
     /// <summary>
     /// Sale products.

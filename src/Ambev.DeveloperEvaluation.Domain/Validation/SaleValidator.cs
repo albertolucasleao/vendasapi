@@ -15,21 +15,15 @@ public class SaleValidator : AbstractValidator<Sale>
     {
         RuleFor(x => x.DateSale)
             .NotEmpty()
-            .WithMessage("DateSale cannot be empty."); ;
-        RuleFor(x => x.DateUpdate)
-            .NotEmpty()
-            .WithMessage("DateUpdate cannot be empty."); ;
+            .WithMessage("DateSale cannot be empty."); ;        
         RuleFor(x => x.IdCustomer)
             .NotEmpty()
-            .WithMessage("IdCustomer cannot be empty."); ;
+            .WithMessage("IdCustomer cannot be empty.");
         RuleFor(x => x.ValueTotal)
             .NotEmpty()
-            .WithMessage("ValueTotal cannot be empty."); ;
+            .WithMessage("ValueTotal cannot be empty.");
         RuleFor(x => x.Branch)
             .NotEmpty()
-            .WithMessage("Branch cannot be empty."); ;
-        RuleFor(x => x.Cancelled)
-            .NotEmpty()
-            .WithMessage("Cancelled cannot be empty."); ;
+            .WithMessage("Branch cannot be empty.");
     }
 }

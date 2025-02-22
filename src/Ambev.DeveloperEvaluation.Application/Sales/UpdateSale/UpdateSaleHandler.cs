@@ -2,6 +2,7 @@
 using FluentValidation;
 using Ambev.DeveloperEvaluation.Domain.Repositories;
 using AutoMapper;
+using Ambev.DeveloperEvaluation.Domain.Enums;
 
 namespace Ambev.DeveloperEvaluation.Application.Sales.UpdateSale;
 
@@ -42,7 +43,7 @@ public class UpdateSaleHandler : IRequestHandler<UpdateSaleCommand, UpdateSaleRe
         var entidade = await _saleRepository.GetByIdAsync(request.Id, cancellationToken);
         if (entidade == null) throw new KeyNotFoundException($"Sale with ID {request.Id} not found");
 
-        entidade.Cancelled = true;
+        entidade.Status = SaleStatus.Active;
         entidade.DateUpdate = DateTime.UtcNow;
 
         var updateSale = await _saleRepository.UpdateAsync(entidade, cancellationToken);

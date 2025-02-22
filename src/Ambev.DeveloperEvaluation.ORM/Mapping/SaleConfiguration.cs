@@ -16,7 +16,10 @@ namespace Ambev.DeveloperEvaluation.ORM.Mapping
             builder.Property(s => s.IdCustomer).IsRequired();
             builder.Property(s => s.ValueTotal).IsRequired();
             builder.Property(s => s.Branch).IsRequired();
-            builder.Property(s => s.Cancelled).IsRequired();
+
+            builder.Property(u => u.Status)
+                .HasConversion<string>()
+                .HasMaxLength(20);
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace Ambev.DeveloperEvaluation.Application.Sales.CreateSale;
+﻿using Ambev.DeveloperEvaluation.Domain.Enums;
+
+namespace Ambev.DeveloperEvaluation.Application.Sales.CreateSale;
 
 /// <summary>
 /// Represents the response returned after successfully creating a new sale.
@@ -37,7 +39,7 @@ public class CreateSaleResult
     /// <summary>
     /// The sale is canceled, true or false
     /// </summary>
-    public bool Cancelled { get; set; }
+    public SaleStatus Status { get; set; }
 
     /// <summary>
     /// The products for sale

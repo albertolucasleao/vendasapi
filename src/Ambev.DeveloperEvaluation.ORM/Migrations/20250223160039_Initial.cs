@@ -21,7 +21,7 @@ namespace Ambev.DeveloperEvaluation.ORM.Migrations
                     IdCustomer = table.Column<Guid>(type: "uuid", nullable: false),
                     ValueTotal = table.Column<double>(type: "double precision", nullable: false),
                     Branch = table.Column<Guid>(type: "uuid", nullable: false),
-                    Cancelled = table.Column<bool>(type: "boolean", nullable: false)
+                    Status = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false)
                 },
                 constraints: table =>
                 {

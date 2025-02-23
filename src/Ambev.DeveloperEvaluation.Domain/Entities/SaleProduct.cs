@@ -1,4 +1,5 @@
 ﻿using Ambev.DeveloperEvaluation.Domain.Common;
+using System.Text.Json.Serialization;
 
 namespace Ambev.DeveloperEvaluation.Domain.Entities;
 
@@ -13,6 +14,7 @@ public class SaleProduct : BaseEntity
     public double PricesTotal { get; set; }
 
     public Guid IdSale { get; set; }
+    [JsonIgnore]
     public Sale Sale { get; set; }
 
     public void ApplyDiscount()

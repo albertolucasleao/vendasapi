@@ -51,8 +51,6 @@ public class Program
                 );
             });
 
-            //builder.Services.AddScoped<IRequestHandler<GetSaleCommand, GetSaleResult>, GetSaleHandler>();
-
             builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
             var app = builder.Build();

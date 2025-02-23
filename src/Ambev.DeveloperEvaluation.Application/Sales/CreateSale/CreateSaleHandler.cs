@@ -3,6 +3,8 @@ using FluentValidation;
 using Ambev.DeveloperEvaluation.Domain.Entities;
 using AutoMapper;
 using Ambev.DeveloperEvaluation.Domain.Repositories;
+using Ambev.DeveloperEvaluation.Domain.Bus;
+using Ambev.DeveloperEvaluation.Domain.Enums;
 
 namespace Ambev.DeveloperEvaluation.Application.Sales.CreateSale;
 
@@ -13,6 +15,7 @@ public class CreateSaleHandler : IRequestHandler<CreateSaleCommand, CreateSaleRe
 {
     private readonly IMapper _mapper;
     private readonly ISaleRepository _saleRepository;
+    private readonly IRabbitMqProducer _producer;
 
     /// <summary>
     /// Initializes a new instance of CreateSaleHandler
@@ -21,10 +24,12 @@ public class CreateSaleHandler : IRequestHandler<CreateSaleCommand, CreateSaleRe
     /// <param name="mapper">The AutoMapper instance</param>
     /// <param name="validator">The validator for CreateSaleCommand</param>
     public CreateSaleHandler(IMapper mapper, 
-                             ISaleRepository saleRepository)
+                             ISaleRepository saleRepository,
+                             IRabbitMqProducer producer)
     {
         _mapper = mapper ?? throw new ArgumentException(nameof(IMapper));
         _saleRepository = saleRepository ?? throw new ArgumentException(nameof(ISaleRepository));
+        _producer = producer ?? throw new ArgumentException(nameof(IRabbitMqProducer));
     }
 
     /// <summary>
@@ -52,7 +57,12 @@ public class CreateSaleHandler : IRequestHandler<CreateSaleCommand, CreateSaleRe
         sale.Products.ForEach(x => { valorTotal += x.TotalPaid; });
         sale.ValueTotal = valorTotal;
 
+        sale.Status = SaleStatus.Active;
+
         var createdSale = await _saleRepository.CreateAsync(sale, cancellationToken);
+
+        _producer.Publish("create_sale", createdSale);
+
         var result = _mapper.Map<CreateSaleResult>(createdSale);
 
         return result;

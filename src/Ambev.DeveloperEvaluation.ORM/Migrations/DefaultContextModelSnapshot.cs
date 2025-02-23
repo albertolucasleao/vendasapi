@@ -31,9 +31,6 @@ namespace Ambev.DeveloperEvaluation.ORM.Migrations
                     b.Property<Guid>("Branch")
                         .HasColumnType("uuid");
 
-                    b.Property<bool>("Cancelled")
-                        .HasColumnType("boolean");
-
                     b.Property<DateTime>("DateSale")
                         .HasColumnType("timestamp with time zone");
 
@@ -42,6 +39,11 @@ namespace Ambev.DeveloperEvaluation.ORM.Migrations
 
                     b.Property<Guid>("IdCustomer")
                         .HasColumnType("uuid");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
 
                     b.Property<double>("ValueTotal")
                         .HasColumnType("double precision");

@@ -1,4 +1,5 @@
 ﻿using Ambev.DeveloperEvaluation.Domain.Enums;
+using System.Text.Json.Serialization;
 
 namespace Ambev.DeveloperEvaluation.WebApi.Features.Sale.CreateSale;
 
@@ -35,6 +36,7 @@ public class CreateSaleResponse
     /// <summary>
     /// The sale is canceled, true or false
     /// </summary>
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public SaleStatus Status { get; set; }
 
     /// <summary>

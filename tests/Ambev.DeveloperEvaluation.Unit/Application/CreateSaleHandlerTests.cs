@@ -1,4 +1,5 @@
 ﻿using Ambev.DeveloperEvaluation.Application.Sales.CreateSale;
+using Ambev.DeveloperEvaluation.Domain.Bus;
 using Ambev.DeveloperEvaluation.Domain.Entities;
 using Ambev.DeveloperEvaluation.Domain.Enums;
 using Ambev.DeveloperEvaluation.Domain.Repositories;
@@ -19,6 +20,7 @@ public class CreateSaleHandlerTests
     private readonly ISaleRepository _saleRepository;
     private readonly IMapper _mapper;
     private readonly CreateSaleHandler _handler;
+    private readonly IRabbitMqProducer _rabbitMqProducer;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="CreateSaleHandlerTests"/> class.
@@ -28,7 +30,7 @@ public class CreateSaleHandlerTests
     {
         _saleRepository = Substitute.For<ISaleRepository>();
         _mapper = Substitute.For<IMapper>();
-        _handler = new CreateSaleHandler(_mapper, _saleRepository);
+        _handler = new CreateSaleHandler(_mapper, _saleRepository, _rabbitMqProducer);
     }
 
     /// <summary>

@@ -3,6 +3,7 @@ using FluentValidation;
 using Ambev.DeveloperEvaluation.Domain.Repositories;
 using AutoMapper;
 using Ambev.DeveloperEvaluation.Domain.Enums;
+using Ambev.DeveloperEvaluation.Domain.Bus;
 
 namespace Ambev.DeveloperEvaluation.Application.Sales.UpdateSale;
 
@@ -13,6 +14,8 @@ public class UpdateSaleHandler : IRequestHandler<UpdateSaleCommand, UpdateSaleRe
 {
     private readonly IMapper _mapper;
     private readonly ISaleRepository _saleRepository;
+    private readonly IRabbitMqProducer _producer;
+
 
     /// <summary>
     /// Initializes a new instance of UpdateSaleHandler
@@ -21,10 +24,12 @@ public class UpdateSaleHandler : IRequestHandler<UpdateSaleCommand, UpdateSaleRe
     /// <param name="mapper">The AutoMapper instance</param>
     /// <param name="validator">The validator for UpdateSaleCommand</param>
     public UpdateSaleHandler(IMapper mapper,
-                             ISaleRepository saleRepository)
+                             ISaleRepository saleRepository,
+                             IRabbitMqProducer producer)
     {
         _mapper = mapper ?? throw new ArgumentException(nameof(IMapper));
         _saleRepository = saleRepository ?? throw new ArgumentException(nameof(ISaleRepository));
+        _producer = producer ?? throw new ArgumentException(nameof(IRabbitMqProducer));
     }
 
     /// <summary>
@@ -42,14 +47,17 @@ public class UpdateSaleHandler : IRequestHandler<UpdateSaleCommand, UpdateSaleRe
 
         var entidade = await _saleRepository.GetByIdAsync(request.Id, cancellationToken);
         if (entidade == null) throw new KeyNotFoundException($"Sale with ID {request.Id} not found");
+        if (entidade.Status == SaleStatus.Canceled) { return _mapper.Map<UpdateSaleResult>(entidade); };
 
-        entidade.Status = SaleStatus.Active;
+        entidade.Status = SaleStatus.Canceled;
         entidade.DateUpdate = DateTime.UtcNow;
 
         var updateSale = await _saleRepository.UpdateAsync(entidade, cancellationToken);
         if (updateSale == null) throw new KeyNotFoundException($"Sale with ID {request.Id} not found");
 
         var result = _mapper.Map<UpdateSaleResult>(updateSale);
+
+        _producer.Publish("update_sale", entidade);
 
         return result;
     }

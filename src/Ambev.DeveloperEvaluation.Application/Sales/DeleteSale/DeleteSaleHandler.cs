@@ -1,7 +1,7 @@
 ﻿using Ambev.DeveloperEvaluation.Domain.Repositories;
-using AutoMapper;
 using MediatR;
 using FluentValidation;
+using Ambev.DeveloperEvaluation.Domain.Bus;
 
 namespace Ambev.DeveloperEvaluation.Application.Sales.DeleteSale;
 
@@ -10,8 +10,8 @@ namespace Ambev.DeveloperEvaluation.Application.Sales.DeleteSale;
 /// </summary>
 public class DeleteSaleHandler : IRequestHandler<DeleteSaleCommand, DeleteSaleResult>
 {
-    private readonly IMapper _mapper;
     private readonly ISaleRepository _saleRepository;
+    private readonly IRabbitMqProducer _producer;
 
     /// <summary>
     /// Initializes a new instance of DeleteSaleHandler
@@ -19,11 +19,11 @@ public class DeleteSaleHandler : IRequestHandler<DeleteSaleCommand, DeleteSaleRe
     /// <param name="saleRepository">The sale repository</param>
     /// <param name="mapper">The AutoMapper instance</param>
     /// <param name="validator">The validator for DeleteSaleCommand</param>
-    public DeleteSaleHandler(IMapper mapper,
-                             ISaleRepository saleRepository)
+    public DeleteSaleHandler(ISaleRepository saleRepository,
+                             IRabbitMqProducer producer)
     {
-        _mapper = mapper ?? throw new ArgumentException(nameof(IMapper));
         _saleRepository = saleRepository ?? throw new ArgumentException(nameof(ISaleRepository));
+        _producer = producer ?? throw new ArgumentException(nameof(IRabbitMqProducer));
     }
 
     /// <summary>
@@ -44,6 +44,8 @@ public class DeleteSaleHandler : IRequestHandler<DeleteSaleCommand, DeleteSaleRe
 
         var success = await _saleRepository.DeleteAsync(entidade, cancellationToken);
         if (!success) throw new KeyNotFoundException($"Sale with ID {request.Id} not deleted");
+        
+        _producer.Publish("delete_sale", entidade);
 
         return new DeleteSaleResult { Success = true };
     }

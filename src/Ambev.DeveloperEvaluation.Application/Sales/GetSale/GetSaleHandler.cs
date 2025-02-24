@@ -2,6 +2,7 @@
 using AutoMapper;
 using MediatR;
 using FluentValidation;
+using Ambev.DeveloperEvaluation.Domain.Bus;
 
 namespace Ambev.DeveloperEvaluation.Application.Sales.GetSale;
 
@@ -12,6 +13,8 @@ public class GetSaleHandler : IRequestHandler<GetSaleCommand, GetSaleResult>
 {
     private readonly IMapper _mapper;
     private readonly ISaleRepository _saleRepository;
+    private readonly IRabbitMqProducer _producer;
+
 
     /// <summary>
     /// Initializes a new instance of GetSaleHandler
@@ -20,10 +23,12 @@ public class GetSaleHandler : IRequestHandler<GetSaleCommand, GetSaleResult>
     /// <param name="mapper">The AutoMapper instance</param>
     /// <param name="validator">The validator for GetSaleCommand</param>
     public GetSaleHandler(IMapper mapper,
-                          ISaleRepository saleRepository)
+                          ISaleRepository saleRepository,
+                          IRabbitMqProducer producer)
     {
         _mapper = mapper ?? throw new ArgumentException(nameof(IMapper));
         _saleRepository = saleRepository ?? throw new ArgumentException(nameof(ISaleRepository));
+        _producer = producer ?? throw new ArgumentException(nameof(IRabbitMqProducer));
     }
 
     /// <summary>
@@ -43,6 +48,8 @@ public class GetSaleHandler : IRequestHandler<GetSaleCommand, GetSaleResult>
         var sale = await _saleRepository.GetByIdAsync(request.Id, cancellationToken);
         if (sale == null)
             throw new KeyNotFoundException($"Sale with ID {request.Id} not found");
+
+        _producer.Publish("obter_sale", sale);
 
         return _mapper.Map<GetSaleResult>(sale);
     }

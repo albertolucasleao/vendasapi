@@ -3,16 +3,16 @@ using Ambev.DeveloperEvaluation.Domain.Bus;
 using Ambev.DeveloperEvaluation.Domain.Entities;
 using Ambev.DeveloperEvaluation.Domain.Enums;
 using Ambev.DeveloperEvaluation.Domain.Repositories;
-using Ambev.DeveloperEvaluation.Unit.Application.TestData;
+using Ambev.DeveloperEvaluation.Unit.Application.TestData.SaleTestsData.Create;
 using AutoMapper;
 using FluentAssertions;
 using NSubstitute;
 using NSubstitute.ReceivedExtensions;
 using Xunit;
 
-namespace Ambev.DeveloperEvaluation.Unit.Application;
+namespace Ambev.DeveloperEvaluation.Unit.Application.SaleTests.CreateSale.Create;
 
-/// <summary>
+// <summary>
 /// Contains unit tests for the <see cref="CreateSaleHandler"/> class.
 /// </summary>
 public class CreateSaleHandlerTests
@@ -30,18 +30,19 @@ public class CreateSaleHandlerTests
     {
         _saleRepository = Substitute.For<ISaleRepository>();
         _mapper = Substitute.For<IMapper>();
+        _rabbitMqProducer = Substitute.For<IRabbitMqProducer>();
         _handler = new CreateSaleHandler(_mapper, _saleRepository, _rabbitMqProducer);
     }
 
     /// <summary>
-    /// Tests that a valid user creation request is handled successfully.
+    /// Tests that a valid sale creation request is handled successfully.
     /// </summary>
     [Fact(DisplayName = "Given valid sale data When creating sale Then returns success response")]
-    [Trait("Category", "Create Sale Handler Test")]
+    [Trait("Category", "Sale Test")]
     public async Task Handle_ValidRequest_ReturnsSuccessResponse()
     {
         // Given
-        var command = CreateSaleHandlerTestData.GenerateValidCommand();
+        var command = CreateSaleTestData.GenerateValidCommand();
         
         var valorTotal = new double();
         command.Products.ForEach(x => { valorTotal += x.Quantity * x.PricesUnit; });
@@ -52,6 +53,7 @@ public class CreateSaleHandlerTests
             PricesUnit = p.PricesUnit
         }).ToList();
 
+       
         var sale = new Sale
         {
             Id = Guid.NewGuid(),
@@ -64,6 +66,23 @@ public class CreateSaleHandlerTests
             Products = products
         };
 
+        var saleProduct = sale.Products.FirstOrDefault();
+
+        var resultProduct = new List<CreateSaleProductResult>
+        {
+            new CreateSaleProductResult 
+            {
+                Id = saleProduct.Id,
+                IdSale = saleProduct.IdSale,
+                IdProduct = saleProduct.IdProduct,
+                Quantity = saleProduct.Quantity,
+                PricesUnit = saleProduct.PricesUnit,
+                PricesTotal = saleProduct.PricesTotal,
+                Discount = saleProduct.Discount,
+                TotalPaid = saleProduct.TotalPaid
+            }
+        };
+
         var result = new CreateSaleResult
         {
             Id = sale.Id,
@@ -72,7 +91,7 @@ public class CreateSaleHandlerTests
             ValueTotal = sale.ValueTotal,
             Branch = sale.Branch,
             Status = sale.Status,
-            Products = _mapper.Map<List<CreateSaleProductResult>>(sale.Products)
+            Products = resultProduct
         };
 
         _mapper.Map<Sale>(command).Returns(sale);
@@ -93,7 +112,7 @@ public class CreateSaleHandlerTests
     /// Tests that an invalid sale creation request throws a validation exception.
     /// </summary>
     [Fact(DisplayName = "Given invalid sale data When creating sale Then throws validation exception")]
-    [Trait("Category", "Create Sale Handler Test")]
+    [Trait("Category", "Sale Test")]
     public async Task Handle_InvalidRequest_ThrowsValidationException()
     {
         // Given
@@ -109,12 +128,12 @@ public class CreateSaleHandlerTests
     /// <summary>
     /// Tests that the mapper is called with the correct command.
     /// </summary>
-    [Fact(DisplayName = "Given valid command When handling Then maps command to user entity")]
-    [Trait("Category", "Create Sale Handler Test")]
-    public async Task Handle_ValidRequest_MapsCommandToUser()
+    [Fact(DisplayName = "Given valid command When handling Then maps command to sale entity")]
+    [Trait("Category", "Sale Test")]
+    public async Task Handle_ValidRequest_MapsCommandToSale()
     {
         // Given
-        var command = CreateSaleHandlerTestData.GenerateValidCommand();
+        var command = CreateSaleTestData.GenerateValidCommand();
 
         var valorTotal = new double();
         command.Products.ForEach(x => { valorTotal += x.Quantity * x.PricesUnit; });

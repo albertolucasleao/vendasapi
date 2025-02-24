@@ -38,7 +38,7 @@ public class UpdateSaleProductResponse
     /// <summary>
     /// The discount applied
     /// </summary>
-    public string Discount { get; set; } = string.Empty;
+    public double Discount { get; set; }
 
     /// <summary>
     /// The total with discount

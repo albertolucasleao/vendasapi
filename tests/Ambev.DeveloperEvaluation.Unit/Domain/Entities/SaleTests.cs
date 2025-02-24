@@ -29,10 +29,10 @@ public class SaleTests
     }
 
     /// <summary>
-    /// Tests that validation fails when user properties are invalid.
+    /// Tests that validation fails when sale properties are invalid.
     /// </summary>
-    [Fact(DisplayName = "Validation should fail for invalid user data")]
-    public void Given_InvalidUserData_When_Validated_Then_ShouldReturnInvalid()
+    [Fact(DisplayName = "Validation should fail for invalid sale data")]
+    public void Given_InvalidSaleData_When_Validated_Then_ShouldReturnInvalid()
     {
         // Arrange
         var sale = new Sale

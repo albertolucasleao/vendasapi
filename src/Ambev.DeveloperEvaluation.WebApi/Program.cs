@@ -1,4 +1,5 @@
 using Ambev.DeveloperEvaluation.Application;
+using Ambev.DeveloperEvaluation.Application.Sales.GetSale;
 using Ambev.DeveloperEvaluation.Common.HealthChecks;
 using Ambev.DeveloperEvaluation.Common.Logging;
 using Ambev.DeveloperEvaluation.Common.Security;
@@ -33,7 +34,7 @@ public class Program
                 options.UseNpgsql(
                     builder.Configuration.GetConnectionString("DefaultConnection"),
                     b => b.MigrationsAssembly("Ambev.DeveloperEvaluation.ORM")
-                )
+                ).LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information)
             );
 
             builder.Services.AddJwtAuthentication(builder.Configuration);

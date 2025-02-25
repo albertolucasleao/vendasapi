@@ -1,5 +1,3 @@
-# vendasapi
-
 # Sale API
 
 Este repositório contém o teste técnico da empresa Taking para a posição de desenvolvedor na Ambev. O projeto consiste no desenvolvimento de um CRUD de Vendas, incluindo testes unitários e um exemplo de publicação em uma fila.

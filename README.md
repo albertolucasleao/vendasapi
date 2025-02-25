@@ -19,6 +19,8 @@ docker-compose up
 
 ```sh
 dotnet ef migrations add Initial
+```
+```sh
 dotnet ef database update
 ```
 
